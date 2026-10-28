@@ -29,11 +29,11 @@ Default verbosity values:
 local Deck = require("deck")
 local Logger = require("logger")
 local G = require("game")
-
 local Game = G.Game
 local Verbosity = G.Verbosity
-
 local SeedType = require("seedtype")
+
+local SIMULATION_ROUNDS = math.floor(2 ^ 12)
 
 local Simulation = {
 	game = Game,
@@ -138,12 +138,12 @@ local actions = {
 
 	average = function(verbosity)
 		if verbosity == nil then
-			Simulation:calcaverage(256, Verbosity.LOWEST)
+			Simulation:calcaverage(SIMULATION_ROUNDS, Verbosity.LOWEST)
 		else
 			if verbosity == Verbosity.HIGH then
 				verbosity = Verbosity.MEDIUM
 			end
-			Simulation:calcaverage(256, verbosity)
+			Simulation:calcaverage(SIMULATION_ROUNDS, verbosity)
 		end
 	end,
 }
