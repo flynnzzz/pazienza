@@ -35,11 +35,7 @@ Default verbosity values:
   average: LOWEST
 ```
 
-## 3. notes
+## 3. rules
 
-- My first multiple files lua project, this helped me greatly in familiarizing
-with the language
-- ~Implementing the game solver using recursion was very stimulating~
-- Finding flaws and fixing the game solver's logic was very stimulating
-- Digitalizing this card game and "achieving victory" this way was quite
-satisfying (considering the unlikeliness of winning with actual physical cards).
+...
+
