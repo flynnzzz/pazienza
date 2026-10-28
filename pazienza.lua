@@ -57,8 +57,6 @@ function Simulation:startwith(verbosity)
 			Logger:cache(string.format("%d. %s\n", counter + 1, Game:tablecompactstr()))
 		end
 
-		Game:restart()
-
 		counter = counter + 1
 	until won
 	Logger:flush(verbosity == Verbosity.MEDIUM)

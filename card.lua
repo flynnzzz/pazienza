@@ -8,7 +8,7 @@ function Card:of(seed, value, name)
 		error("card value not allowed: " .. tostring(value))
 	end
 
-	card.seed = seed
+	card.seed = tostring(seed)
 	if name ~= nil then
 		card.name = name
 	end
