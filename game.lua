@@ -7,7 +7,7 @@ local Verbosity = {
 	HIGH = "h",
 }
 
-local Game = { deck = nil, stack = {} }
+local Game = { deck = nil, table = {} }
 
 function Game:attachdeck(deck)
 	self.deck = deck
@@ -18,12 +18,12 @@ function Game.match(head, tail)
 end
 
 function Game:check()
-	local stack = self.stack
-	local pivot = math.max(#stack, 3)
+	local t = self.table
+	local pivot = math.max(#t, 3)
 
-	while pivot <= #stack do
-		if self.match(stack[pivot], stack[pivot - 2]) then
-			table.remove(stack, pivot - 2)
+	while pivot <= #t do
+		if self.match(t[pivot], t[pivot - 2]) then
+			table.remove(t, pivot - 2)
 			pivot = math.max(pivot - 2, 3)
 		else
 			pivot = pivot + 1
@@ -33,9 +33,9 @@ end
 
 function Game:draw()
 	if self.deck == nil then
-		error("no deck associated with game, call Game:attachdeck() to attach")
+		error("draw: no deck associated with game, call Game:attachdeck( ... ) to attach")
 	end
-	table.insert(self.stack, self.deck:draw())
+	table.insert(self.table, self.deck:draw())
 end
 
 function Game.drawmul(n)
@@ -45,23 +45,23 @@ function Game.drawmul(n)
 end
 
 function Game:won()
-	return #self.stack == 2
+	return #self.table == 2
 end
 
-function Game:stacktostring()
+function Game:tabletostring()
 	local values = {}
 
-	for _, value in ipairs(self.stack) do
+	for _, value in ipairs(self.table) do
 		values[#values + 1] = tostring(value)
 	end
 
 	return "{ " .. table.concat(values, ", ") .. " }"
 end
 
-function Game:stackcompactstr()
+function Game:tablecompactstr()
 	local values = {}
 
-	for _, value in ipairs(self.stack) do
+	for _, value in ipairs(self.table) do
 		values[#values + 1] = value:compactstr()
 	end
 
@@ -70,10 +70,10 @@ end
 
 function Game:playwith(verbosity)
 	if self.deck == nil then
-		error("> no deck associated with game, call Game:attachdeck() to attach")
+		error("playwith: no deck associated with game, call Game:attachdeck() to attach")
 	end
-	if #self.stack > 0 then
-		error("> restart game with Game:restart() before playing another round")
+	if #self.table > 0 then
+		self:restart()
 	end
 
 	Game.drawmul(2)
@@ -81,20 +81,20 @@ function Game:playwith(verbosity)
 		Game:draw()
 
 		if verbosity == Verbosity.HIGH then
-			Logger:cache(string.format("> drawing: %s\n", self:stackcompactstr()))
+			Logger:cache(string.format("> drawing: %s\n", self:tablecompactstr()))
 		end
 
-		local cardcount = #self.stack
+		local cardcount = #self.table
 		Game:check()
 
 		if verbosity == Verbosity.HIGH then
-			if #self.stack < cardcount then
-				Logger:cache(string.format(" > matching: %s\n", self:stackcompactstr()))
+			if #self.table < cardcount then
+				Logger:cache(string.format(" > matching: %s\n", self:tablecompactstr()))
 			end
-			Logger:cache(string.format("> cards left: %d\n\n", self.deck.maxcards))
+			Logger:cache(string.format("> cards left: %d\n\n", #self.deck.cards))
 		end
 
-	until self.deck.maxcards == 0
+	until #self.deck.cards == 0
 	Logger:flush(verbosity == Verbosity.HIGH)
 end
 
@@ -104,7 +104,7 @@ end
 
 function Game:restart()
 	self.deck:regenerate()
-	self.stack = {}
+	self.table = {}
 end
 
 return { Game = Game, Verbosity = Verbosity }

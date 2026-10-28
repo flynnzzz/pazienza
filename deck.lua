@@ -1,42 +1,38 @@
 local SeedSet = require("seedset")
 
-function table.len(table)
-	local count = 0
-	for _ in pairs(table) do
-		count = count + 1
-	end
-	return count
-end
-
 local Deck = {}
 Deck.__index = Deck
 
 local function generate(deck, times)
-	local stack = {}
+	local pile = {}
 	local n = times or 1
+
+	if deck.seedtype == nil then
+		error("generate: seedtype not set")
+	end
 
 	for _ = 1, n do
 		for _, s in pairs(deck.seedtype) do
 			for _, v in pairs(deck[s].values) do
-				table.insert(stack, v)
+				table.insert(pile, v)
 			end
 		end
 		for _, entry in pairs(deck.seedtype.unnumbered or {}) do
 			for _, v in ipairs(deck[entry.name].values) do
-				table.insert(stack, v)
+				table.insert(pile, v)
 			end
 		end
 	end
 
-	return stack
+	return pile
 end
 
 function Deck:printcards()
 	if self.seedtype == nil then
-		error("seedtype not set for this deck")
+		error("printcards: seedtype not set")
 	end
 	local seedtype = self.seedtype
-	for _ = 1, seedtype.times or 1 do
+	for _ = 1, seedtype.multiplicity or 1 do
 		for _, seed in pairs(seedtype) do
 			for _, v in pairs(self[seed].values) do
 				print(tostring(v))
@@ -50,54 +46,56 @@ function Deck:printcards()
 	end
 end
 
-function Deck:new(seedtype, multiplicity)
+function Deck:new(seedtype, times)
 	local deck = setmetatable({}, self)
-	local mul = multiplicity or 1
-	local times = seedtype.times or 1
-
 	deck.seedtype = seedtype
-	deck.multiplicity = mul * times
 
-	for _, value in pairs(seedtype) do
-		deck[value] = SeedSet:new(value, seedtype.maxvalue)
+	seedtype.multiplicity = seedtype.multiplicity or 1
+	times = times or 1
+	deck.multiplicity = seedtype.multiplicity * times
+
+	for _, setname in pairs(seedtype) do
+		deck[setname] = SeedSet:new(setname, seedtype.maxvalue)
 	end
 
-	local unnumbered = seedtype.unnumbered or {}
-	for _, entry in pairs(unnumbered) do
-		local namelist = entry.set
-		deck[entry.name] = SeedSet:new(entry.name, #namelist, namelist)
+	local unnumbered = seedtype.unnumbered
+	if unnumbered ~= nil then
+		for _, entry in pairs(unnumbered) do
+			local namelist = entry.setnames
+			deck[entry.name] = SeedSet:new(entry.name, #namelist, namelist)
+		end
 	end
 
 	deck.cards = generate(deck, deck.multiplicity)
 	deck.template = table.move(deck.cards, 1, #deck.cards, 1, {})
-	deck.maxcards = #deck.cards
 
 	return deck
 end
 
 function Deck:regenerate()
 	self.cards = table.move(self.template, 1, #self.template, 1, {})
-	self.maxcards = #self.cards
 	return self.cards
 end
 
 function Deck:draw()
-	local i = math.random(1, self.maxcards)
+	local i = math.random(1, #self.cards)
 	local drawn = self.cards[i]
 
-	self.cards[i] = self.cards[self.maxcards]
-	self.cards[self.maxcards] = nil
-	self.maxcards = self.maxcards - 1
+	self.cards[i] = self.cards[#self.cards]
+	self.cards[#self.cards] = nil
 
 	return drawn
 end
 
 function Deck:__tostring()
-	local s = ""
-	for _, v in pairs(self.seedtype) do
-		s = s .. tostring(self[v]) .. "\n"
+	if self.seedtype ~= nil then
+		error("__tostring: seedtype not set")
 	end
-	return s
+	local s = {}
+	for i, v in ipairs(self.seedtype) do
+		s[i] = tostring(self[v])
+	end
+	return table.concat(s, "\n")
 end
 
 return Deck

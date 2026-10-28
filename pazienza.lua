@@ -37,11 +37,11 @@ local SeedType = require("seedtype")
 
 local Simulation = {
 	game = Game,
-	counter = 0,
 }
 
 function Simulation:startwith(verbosity)
 	local won = false
+	local counter = 0
 	local winningpiles
 
 	local start = os.clock()
@@ -51,15 +51,15 @@ function Simulation:startwith(verbosity)
 		Game:playwith(verbosity)
 		won = Game:won()
 		if won then
-			winningpiles = Game:stacktostring()
+			winningpiles = Game:tabletostring()
 		end
 		if verbosity == Verbosity.MEDIUM then
-			Logger:cache(string.format("%d. %s\n", self.counter + 1, Game:stackcompactstr()))
+			Logger:cache(string.format("%d. %s\n", counter + 1, Game:tablecompactstr()))
 		end
 
 		Game:restart()
 
-		self.counter = self.counter + 1
+		counter = counter + 1
 	until won
 	Logger:flush(verbosity == Verbosity.MEDIUM)
 
@@ -68,14 +68,12 @@ function Simulation:startwith(verbosity)
 	Logger.log(
 		string.format(
 			"> achieved victory after %d rounds (%.4f seconds)\n> winning piles: %s",
-			self.counter,
+			counter,
 			elapsed,
 			winningpiles
 		),
 		verbosity ~= Verbosity.LOWEST
 	)
-	local counter = self.counter
-	self.counter = 0
 
 	return counter
 end
@@ -117,10 +115,10 @@ local actions = {
 		else
 			Game:playwith(verbosity)
 			Logger.log(
-				"> final round: " .. Game:stacktostring(),
+				"> final round: " .. Game:tabletostring(),
 				verbosity == Verbosity.MEDIUM or verbosity == Verbosity.HIGH
 			)
-			Logger.log("> " .. Game:stackcompactstr(), verbosity == Verbosity.LOW)
+			Logger.log("> " .. Game:tablecompactstr(), verbosity == Verbosity.LOW)
 		end
 		if Game:won() then
 			Logger.log("> You won!")
@@ -240,13 +238,13 @@ end
 -- 	Card:of("Hea", 9),
 -- }
 --
--- Game.stack = test
+-- Game.table = test
 --
--- print("before matching: " .. Game:stacktostring())
+-- print("before matching: " .. Game:tabletostring())
 --
 -- Game:check()
 --
--- print("after matching: " .. Game:stacktostring())
+-- print("after matching: " .. Game:tabletostring())
 --
 -- local final = os.clock()
 --

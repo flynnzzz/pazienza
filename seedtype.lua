@@ -43,12 +43,11 @@ local Mahjong = setmetatable({
 	BAMBOO = "Bamboo",
 	CHARACTERS = "Characters",
 	maxvalue = 9,
-	times = 4,
-
+	multiplicity = 4,
 	unnumbered = {
 		WINDS = {
 			name = "Winds",
-			set = {
+			setnames = {
 				"North Wind",
 				"South Wind",
 				"East Wind",
@@ -57,7 +56,7 @@ local Mahjong = setmetatable({
 		},
 		DRAGONS = {
 			name = "Dragons",
-			set = {
+			setnames = {
 				"Red Dragon",
 				"Green Dragon",
 				"White Dragon",
