@@ -16,7 +16,8 @@ Usage:
 Actions:
   play              Play one game
   simulate          Play games until victory
-  average           Calculate the average win rate
+  average           Simulate repeatedly to get an average winchance
+  binomial          Derive info through the binomial distribution
 
 Seedtypes:
   italian           Denare, Coppe, Spade, Bastoni
@@ -30,9 +31,12 @@ Options:
   -h                Set verbosity to HIGH
 
 Default verbosity values:
-  play: HIGH
-  simulate: MEDIUM
-  average: LOWEST
+ - play: HIGH
+ - simulate: MEDIUM
+ - average: LOWEST
+ Actions `average` and `binomial`s verbosities are capped to MEDIUM, passing '-h' produces the same
+ result as '-m'.
+
 ```
 
 ## 3. rules

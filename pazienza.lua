@@ -5,7 +5,8 @@ Usage:
 Actions:
   play              Play one game
   simulate          Play games until victory
-  average            Calculate the average win rate
+  average           Simulate repeatedly to get an average winchance
+  binomial          Derive info through the binomial distribution
 
 Seedtypes:
   italian           Denare, Coppe, Spade, Bastoni
@@ -22,7 +23,7 @@ Default verbosity values:
  - play: HIGH
  - simulate: MEDIUM
  - average: LOWEST
- Action 'average's verbosity is capped to MEDIUM, passing '-h' produces the same
+ Actions `average` and `binomial`s verbosities are capped to MEDIUM, passing '-h' produces the same
  result as '-m'.
 ]]
 
@@ -144,16 +145,16 @@ function Simulation:binomial(N, verbosity)
  > time elapsed: %.4f s
  > average winchance: %.8f %%
  > average # of games to win: %.1f
- > total # of games played: %d
 
-    > X ~ B(%d, %.8f)
+> binomial:
+
+    X ~ B(%d, %.8f)
 
  > E[X]: %.2f
  > Var(X): %.2f]],
 		elapsed,
 		p * 100,
 		average,
-		N,
 		N,
 		p,
 		expected_value,

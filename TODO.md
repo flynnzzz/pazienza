@@ -1,0 +1,1 @@
+- Add a progress bar to actions `average` and `binomial`
