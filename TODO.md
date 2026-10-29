@@ -1,1 +1,2 @@
 - Add a progress bar to actions `average` and `binomial`
+- Add game rules to `README.md`
