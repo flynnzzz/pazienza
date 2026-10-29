@@ -5,7 +5,7 @@ Usage:
 Actions:
   play              Play one game
   simulate          Play games until victory
-  average           Calculate the average win rate
+  average            Calculate the average win rate
 
 Seedtypes:
   italian           Denare, Coppe, Spade, Bastoni
@@ -26,14 +26,15 @@ Default verbosity values:
  result as '-m'.
 ]]
 
+local AVERAGE_SIMULATION_ROUNDS = math.floor(2 ^ 12)
+local BINOMIAL_SIMULATION_ROUNDS = math.floor(2 ^ 20)
+
 local Deck = require("deck")
 local Logger = require("logger")
 local G = require("game")
 local Game = G.Game
 local Verbosity = G.Verbosity
 local SeedType = require("seedtype")
-
-local SIMULATION_ROUNDS = math.floor(2 ^ 12)
 
 local Simulation = {
 	game = Game,
@@ -80,28 +81,84 @@ function Simulation:start()
 	self:startwith(Verbosity.MEDIUM)
 end
 
-function Simulation:calcaverage(maxiteration, verbosity)
-	Logger.log("> running " .. maxiteration .. " simulation loops...")
+-- let W = `winning the game`
+-- law of large numbers:
+--    p(W) ~= nW/N = p (N >> 1)
+--
+-- let X = `number of wins`
+-- then X ~ B(N, p)
+-- and p(X = nW) = binom(N, nW)p^nW * (1 - p)^(N - nW),
+--     E[X = nW] = p * nW = m
+-- that can be approximated to:
+--    X ~ Po(m)
+--    where p(X = nW) = (m^nW * e^-m) \ m!
+--
 
-	local average
-	local totalgames = 0
+-- set a target `nW`
+function Simulation:average(nW, verbosity)
+	Logger.log("> running " .. nW .. " simulation loops...")
 
+	local N = 0
 	local start = os.clock()
-	for _ = 1, maxiteration do
+	for _ = 1, nW do
 		local gamesplayed = self:startwith(verbosity)
-		totalgames = totalgames + gamesplayed
+		N = N + gamesplayed
 	end
 	local elapsed = os.clock() - start
 
-	average = totalgames / maxiteration
-	Logger.log(
-		string.format(
-			"\n> time elapsed: %.4f\n> average winchance: %.8f %%\n> average # of games to win: %.1f",
-			elapsed,
-			1 / average * 100,
-			average
-		)
-	)
+	local p = nW / N
+	local average = N / nW
+	Logger.log(string.format(
+		[[
+ > time elapsed: %.4f s
+ > average winchance: %.8f %%
+ > average # of games to win: %.1f
+ > total # of games played: %d]],
+		elapsed,
+		p * 100,
+		average,
+		N
+	))
+end
+
+-- set a target `N`
+function Simulation:binomial(N, verbosity)
+	Logger.log("> running " .. N .. " game loops...")
+
+	local nW = 0
+	local start = os.clock()
+	for _ = 1, N do
+		Game:playwith(verbosity)
+		if Game:won() then
+			nW = nW + 1
+		end
+	end
+	local elapsed = os.clock() - start
+
+	local p = nW / N
+	local average = N / nW
+	local expected_value = N * p
+	local variance = N * p * (1 - p)
+	Logger.log(string.format(
+		[[
+ > time elapsed: %.4f s
+ > average winchance: %.8f %%
+ > average # of games to win: %.1f
+ > total # of games played: %d
+
+    > X ~ B(%d, %.8f)
+
+ > E[X]: %.2f
+ > Var(X): %.2f]],
+		elapsed,
+		p * 100,
+		average,
+		N,
+		N,
+		p,
+		expected_value,
+		variance
+	))
 
 	return average
 end
@@ -136,12 +193,23 @@ local actions = {
 
 	average = function(verbosity)
 		if verbosity == nil then
-			Simulation:calcaverage(SIMULATION_ROUNDS, Verbosity.LOWEST)
+			Simulation:average(AVERAGE_SIMULATION_ROUNDS, Verbosity.LOWEST)
 		else
 			if verbosity == Verbosity.HIGH then
 				verbosity = Verbosity.MEDIUM
 			end
-			Simulation:calcaverage(SIMULATION_ROUNDS, verbosity)
+			Simulation:average(AVERAGE_SIMULATION_ROUNDS, verbosity)
+		end
+	end,
+
+	binomial = function(verbosity)
+		if verbosity == nil then
+			Simulation:binomial(BINOMIAL_SIMULATION_ROUNDS, Verbosity.LOWEST)
+		else
+			if verbosity == Verbosity.HIGH then
+				verbosity = Verbosity.MEDIUM
+			end
+			Simulation:binomial(BINOMIAL_SIMULATION_ROUNDS, verbosity)
 		end
 	end,
 }
@@ -205,7 +273,7 @@ function Main()
 	local opts, err = parseargs(arg)
 	if opts == nil then
 		print("> " .. err)
-		print(USAGE)
+		io.write(USAGE)
 		return
 	end
 
