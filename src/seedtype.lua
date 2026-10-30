@@ -22,7 +22,7 @@ function SeedType:is_seed(seed)
 	return false
 end
 
-local ITALIAN = setmetatable({
+local italian = setmetatable({
 	DENARE = "Denare",
 	COPPE = "Coppe",
 	SPADE = "Spade",
@@ -30,7 +30,7 @@ local ITALIAN = setmetatable({
 	maxvalue = 10,
 }, SeedType)
 
-local POKER = setmetatable({
+local poker = setmetatable({
 	HEARTS = "Hearts",
 	DIAMONDS = "Diamonds",
 	CLUBS = "Clubs",
@@ -38,7 +38,8 @@ local POKER = setmetatable({
 	maxvalue = 13,
 }, SeedType)
 
-local MAHJONG = setmetatable({
+-- NOTE: unintuitive, soon to be refactored
+local mahjong = setmetatable({
 	DOTS = "Dots",
 	BAMBOO = "Bamboo",
 	CHARACTERS = "Characters",
@@ -64,5 +65,14 @@ local MAHJONG = setmetatable({
 		},
 	},
 }, SeedType)
+local return_table = { ITALIAN = italian, POKER = poker, MAHJONG = mahjong }
 
-return { ITALIAN = ITALIAN, POKER = POKER, MAHJONG = MAHJONG }
+-- TODO: parser error handler
+print("adding custom seedtypes:")
+local custom_seeds = dofile("../custom/custom.lua")
+for key, value in pairs(custom_seeds) do
+	local custom = setmetatable(value, SeedType)
+	return_table[key] = custom
+end
+
+return return_table

@@ -48,6 +48,7 @@ function Simulation:start()
 	self:startwith(Verbosity.MEDIUM)
 end
 
+--
 -- let W = `winning the game`
 -- law of large numbers:
 --    p(W) ~= nW/N = p (N >> 1)
