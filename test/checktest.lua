@@ -1,3 +1,4 @@
+package.path = package.path .. ";../src/?.lua;./src/?.lua"
 local Game = require("game").Game
 local Card = require("card")
 
