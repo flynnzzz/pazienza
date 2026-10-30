@@ -22,7 +22,7 @@ function SeedType:is_seed(seed)
 	return false
 end
 
-local Italian = setmetatable({
+local ITALIAN = setmetatable({
 	DENARE = "Denare",
 	COPPE = "Coppe",
 	SPADE = "Spade",
@@ -30,7 +30,7 @@ local Italian = setmetatable({
 	maxvalue = 10,
 }, SeedType)
 
-local Poker = setmetatable({
+local POKER = setmetatable({
 	HEARTS = "Hearts",
 	DIAMONDS = "Diamonds",
 	CLUBS = "Clubs",
@@ -38,7 +38,7 @@ local Poker = setmetatable({
 	maxvalue = 13,
 }, SeedType)
 
-local Mahjong = setmetatable({
+local MAHJONG = setmetatable({
 	DOTS = "Dots",
 	BAMBOO = "Bamboo",
 	CHARACTERS = "Characters",
@@ -65,4 +65,4 @@ local Mahjong = setmetatable({
 	},
 }, SeedType)
 
-return { Italian = Italian, Poker = Poker, Mahjong = Mahjong }
+return { ITALIAN = ITALIAN, POKER = POKER, MAHJONG = MAHJONG }
