@@ -1,4 +1,4 @@
-local SeedSet = require("seedset")
+local SeedSet = require("seedset").SeedSet
 
 local Deck = {}
 Deck.__index = Deck

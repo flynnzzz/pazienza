@@ -1,5 +1,11 @@
 local Card = require("card")
 
+local function from_model(model, name)
+	local copy = table.move(model, 1, #model, 1, {})
+	copy.name = name
+	return copy
+end
+
 local function cardset(seed, maxvalue, names)
 	local values = {}
 	for i = 1, maxvalue do
@@ -32,4 +38,4 @@ function SeedSet:__tostring()
 	return self.seed .. "\n values: " .. table.concat(ivalues, " - ")
 end
 
-return SeedSet
+return { SeedSet = SeedSet, from_model = from_model }
