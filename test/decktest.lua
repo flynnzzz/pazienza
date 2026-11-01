@@ -2,5 +2,8 @@ package.path = package.path .. ";../src/?.lua;./src/?.lua;../src/deprecated/?.lu
 local Deck = require("deck")
 local decktypes = require("decktypes")
 
-local d = Deck:new(decktypes.ITALIAN)
-d:printcards()
+local a = Deck:new(decktypes.ITALIAN)
+local b = Deck:new(decktypes.UNO)
+a:printcards()
+print()
+b:printcards()

@@ -1,13 +1,13 @@
 local Card = {}
 Card.__index = Card
 
-function Card:of(seedname, value, has_unique_name, cardname)
+function Card:of(seedname, value, has_unique_name, uniquename)
 	local card = setmetatable({}, self)
 
 	card.seedname = seedname
 	card.value = value
-	card.cardname = cardname or tostring(card.value)
 	card.has_unique_name = has_unique_name
+	card.cardname = uniquename or tostring(card.value)
 	return card
 end
 
