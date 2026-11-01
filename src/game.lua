@@ -81,7 +81,7 @@ function Game:playwith(verbosity)
 		Game:draw()
 
 		if verbosity == Verbosity.HIGH then
-			Logger:cache(string.format("> drawing: %s\n", self:tablecompactstr()))
+			Logger:cache(string.format("> drawing: %s\n", self:tabletostring()))
 		end
 
 		local cardcount = #self.table
@@ -89,7 +89,7 @@ function Game:playwith(verbosity)
 
 		if verbosity == Verbosity.HIGH then
 			if #self.table < cardcount then
-				Logger:cache(string.format(" > matching: %s\n", self:tablecompactstr()))
+				Logger:cache(string.format(" > matching: %s\n", self:tabletostring()))
 			end
 			Logger:cache(string.format("> cards left: %d\n\n", #self.deck.cards))
 		end

@@ -21,7 +21,7 @@ local function seedcards(seedtype)
 	if seedtype.specials ~= nil then
 		local i = v_end + 1
 		for _, special in pairs(seedtype.specials) do
-			cards[i] = Card:of(seedtype.name, special.value, false, special.name)
+			cards[i] = Card:of(seedtype.name, special.value, special.has_unique_name, special.name)
 			i = i + 1
 		end
 	end

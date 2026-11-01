@@ -7,7 +7,7 @@ local custom = {
 		value_start = 1,
 		value_end = 4,
 		specials = {
-			JOLLY = { name = "Jolly", value = 1 },
+			JOLLY = { name = "Fire Jolly", value = 1, has_unique_name = true },
 		},
 	},
 }

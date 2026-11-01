@@ -1,3 +1,4 @@
+package.path = package.path .. ";./src/?.lua;./custom/?.lua;../custom/?.lua"
 local USAGE = [[
 Usage:
   lua pazienza.lua <ACTION> <SEEDTYPE> [OPTIONS]

@@ -80,8 +80,15 @@ local mahjong = setmetatable({
 
 local return_table = { ITALIAN = italian, POKER = poker, MAHJONG = mahjong }
 
+local filefound, custom_seeds = pcall(dofile, "../custom/custom.lua")
+if not filefound then
+	filefound, custom_seeds = pcall(dofile, "./custom/custom.lua")
+end
+if not filefound then
+	error("decktypes: custom module `custom.lua` could not be loaded")
+end
+
 -- TODO: parser error handler
-local custom_seeds = dofile("../custom/custom.lua")
 for key, value in pairs(custom_seeds) do
 	local custom = setmetatable(value, DeckType)
 	return_table[key] = custom
