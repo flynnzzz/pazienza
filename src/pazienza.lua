@@ -135,7 +135,7 @@ local function parseargs(argv)
 	local decktype = string.upper(positionals[2])
 	local seed_t = decktypes[decktype]
 	if seed_t == nil then
-		return nil, "unknown seed type: '" .. positionals[2] .. "'"
+		return nil, "unknown deck type: '" .. positionals[2] .. "'"
 	end
 
 	return { action = action, decktype = seed_t, verbosity = verbosity }

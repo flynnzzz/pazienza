@@ -72,8 +72,8 @@ local mahjong = setmetatable({
 		name = "Dragons",
 		specials = {
 			RED_DRAGON = { name = "Red", value = 200 },
-			GREEN_DRAGON = { name = "South", value = 201 },
-			WHITE_DRAGON = { name = "East", value = 202 },
+			GREEN_DRAGON = { name = "Green", value = 201 },
+			WHITE_DRAGON = { name = "White", value = 202 },
 		},
 	},
 }, DeckType)
