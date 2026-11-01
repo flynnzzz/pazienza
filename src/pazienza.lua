@@ -8,7 +8,7 @@ Actions:
   average           Simulate repeatedly to get an average winchance
   binomial          Derive info through the binomial distribution
 
-Default seedtypes:
+Default decktypes:
   italian           Denare, Coppe, Spade, Bastoni
   poker             Hearts, Diamonds, Clubs, Spades
   mahjong           Dots, Bamboo, Characters, Winds, Dragon
@@ -36,7 +36,7 @@ local G = require("game")
 local Game = G.Game
 local Verbosity = G.Verbosity
 local Simulation = require("simulation")
-local SeedType = require("seedtype")
+local decktypes = require("decktypes")
 
 local actions = {
 	play = function(verbosity)
@@ -131,13 +131,13 @@ local function parseargs(argv)
 		return nil, "unknown action: '" .. positionals[1] .. "'"
 	end
 
-	local seedtype = string.upper(positionals[2])
-	local seed_t = SeedType[seedtype]
+	local decktype = string.upper(positionals[2])
+	local seed_t = decktypes[decktype]
 	if seed_t == nil then
 		return nil, "unknown seed type: '" .. positionals[2] .. "'"
 	end
 
-	return { action = action, seedtype = seed_t, verbosity = verbosity }
+	return { action = action, decktype = seed_t, verbosity = verbosity }
 end
 
 function Main()
@@ -148,7 +148,7 @@ function Main()
 		return
 	end
 
-	Game:attachdeck(Deck:new(opts.seedtype))
+	Game:attachdeck(Deck:new(opts.decktype))
 	opts.action(opts.verbosity)
 end
 

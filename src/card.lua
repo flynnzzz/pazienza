@@ -1,35 +1,34 @@
 local Card = {}
 Card.__index = Card
 
-function Card:of(seed, value, name)
+function Card:of(seedname, value, has_unique_name, cardname)
 	local card = setmetatable({}, self)
 
 	if value <= 0 then
 		error("card value not allowed: " .. tostring(value))
 	end
 
-	card.seed = tostring(seed)
-	if name ~= nil then
-		card.name = name
-	end
+	card.seedname = seedname
 	card.value = value
+	card.cardname = cardname or tostring(card.value)
+	card.has_unique_name = has_unique_name
 	return card
 end
 
 function Card:__tostring()
-	if self.name ~= nil then
-		return self.name
+	if self.has_unique_name then
+		return self.cardname
 	else
-		return self.value .. " of " .. self.seed
+		return self.cardname .. " of " .. self.seedname
 	end
 end
 
 function Card:compactstr()
-	if self.name ~= nil then
-		return self.name
+	if self.has_unique_name then
+		return self.cardname
 	else
-		local pref = math.min(3, #self.seed)
-		return self.value .. " " .. string.sub(self.seed, 1, pref)
+		local pref = math.min(3, #self.seedname)
+		return self.cardname .. " " .. string.sub(self.seedname, 1, pref)
 	end
 end
 

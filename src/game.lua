@@ -14,7 +14,7 @@ function Game:attachdeck(deck)
 end
 
 function Game.match(head, tail)
-	return head.seed == tail.seed or head.value == tail.value
+	return head.seedname == tail.seedname or head.value == tail.value
 end
 
 function Game:check()

@@ -1,4 +1,4 @@
-package.path = package.path .. ";../src/?.lua;./src/?.lua"
+package.path = package.path .. ";../src/?.lua;./src/?.lua;../src/deprecated/?.lua;./src/deprecated/?.lua"
 local Game = require("game").Game
 local Card = require("card")
 
@@ -58,9 +58,9 @@ end
 local function checkseeds(t, correct)
 	for i, entry in pairs(t) do
 		assert(
-			entry.seed == correct[i],
+			entry.seedname == correct[i],
 			"incorrect value: "
-				.. tostring(entry.seed)
+				.. tostring(entry.seedname)
 				.. " instead of "
 				.. tostring(correct[i])
 				.. " at index "

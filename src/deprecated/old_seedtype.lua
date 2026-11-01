@@ -68,7 +68,6 @@ local mahjong = setmetatable({
 local return_table = { ITALIAN = italian, POKER = poker, MAHJONG = mahjong }
 
 -- TODO: parser error handler
-print("adding custom seedtypes:")
 local custom_seeds = dofile("../custom/custom.lua")
 for key, value in pairs(custom_seeds) do
 	local custom = setmetatable(value, SeedType)

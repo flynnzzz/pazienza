@@ -1,23 +1,16 @@
+local from_model = require("seedset").from_model
 local seeds = {}
 
 local custom = {
-	A = "A",
-	B = "B",
-	C = "C",
-	D = "D",
-	E = "E",
-	maxvalue = 5,
+	FIRE = {
+		name = "Fire",
+		value_start = 1,
+		value_end = 4,
+		specials = {
+			JOLLY = { name = "Jolly", value = 1 },
+		},
+	},
 }
-
-local uno = {
-	RED = "Red",
-	GREEN = "Green",
-	BLUE = "Blue",
-	YELLOW = "Yellow",
-	maxvalue = 9,
-}
-
 seeds.CUSTOM = custom
-seeds.UNO = uno
 
 return seeds
