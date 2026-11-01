@@ -21,3 +21,6 @@ local ss_new_mahjong = ss_new:new(dc_new.MAHJONG.BAMBOO)
 
 print(tostring(ss_old_mahjong))
 print(tostring(ss_new_mahjong))
+
+local ss_new_uno = ss_new:new(dc_new.UNO.RED)
+print(tostring(ss_new_uno))

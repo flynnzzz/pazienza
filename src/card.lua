@@ -4,10 +4,6 @@ Card.__index = Card
 function Card:of(seedname, value, has_unique_name, cardname)
 	local card = setmetatable({}, self)
 
-	if value <= 0 then
-		error("card value not allowed: " .. tostring(value))
-	end
-
 	card.seedname = seedname
 	card.value = value
 	card.cardname = cardname or tostring(card.value)

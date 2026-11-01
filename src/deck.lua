@@ -5,13 +5,11 @@ Deck.__index = Deck
 
 local function addfrom(seedset, pile)
 	for _, card in pairs(seedset.cards or {}) do
-		for _ = 1, seedset.multiplicity or 1 do
-			table.insert(pile, card)
-		end
+		table.insert(pile, card)
 	end
 end
 
-local function genfrom_all(seedsets, times)
+local function genfrom(seedsets, times)
 	local pile = {}
 
 	times = times or 1
@@ -39,7 +37,7 @@ function Deck:new(decktype, times)
 		deck.seedsets[key] = SeedSet:new(seedtype)
 	end
 
-	deck.cards = genfrom_all(deck.seedsets, times)
+	deck.cards = genfrom(deck.seedsets, times)
 	deck.template = table.move(deck.cards, 1, #deck.cards, 1, {})
 
 	return deck

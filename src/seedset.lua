@@ -12,17 +12,24 @@ end
 local function seedcards(seedtype)
 	local cards = {}
 	local v_start = seedtype.value_start or 1
-	local v_end = seedtype.value_end or 1
+	local v_end = seedtype.value_end or 0
 
-	for value = v_start, v_end or 1 do
-		cards[value] = Card:of(seedtype.name, value, false)
+	local i = 1
+	for value = v_start, v_end do
+		for _ = 1, seedtype.multiplicity or 1 do
+			cards[i] = Card:of(seedtype.name, value, false)
+			i = i + 1
+		end
 	end
 
 	if seedtype.specials ~= nil then
-		local i = v_end + 1
 		for _, special in pairs(seedtype.specials) do
-			cards[i] = Card:of(seedtype.name, special.value, special.has_unique_name, special.name)
-			i = i + 1
+			local multiplicity = special.multiplicity or seedtype.multiplicity
+			multiplicity = multiplicity or 1
+			for _ = 1, multiplicity do
+				cards[i] = Card:of(special.seedname or seedtype.name, special.value, special.unique_name, special.name)
+				i = i + 1
+			end
 		end
 	end
 
