@@ -61,35 +61,6 @@ end
 --    X ~ Po(m)
 --    where p(X = nW) = (m^nW * e^-m) \ m!
 --
-
--- set a target `nW`
-function Simulation:average(nW, verbosity)
-	Logger.log("> running " .. nW .. " simulation loops...")
-
-	local N = 0
-	local start = os.clock()
-	for _ = 1, nW do
-		local gamesplayed = self:startwith(verbosity)
-		N = N + gamesplayed
-	end
-	local elapsed = os.clock() - start
-
-	local p = nW / N
-	local average = N / nW
-	Logger.log(string.format(
-		[[
- > time elapsed: %.4f s
- > average winchance: %.8f %%
- > average # of games to win: %.1f
- > total # of games played: %d]],
-		elapsed,
-		p * 100,
-		average,
-		N
-	))
-end
-
--- set a target `N`
 function Simulation:binomial(N, verbosity)
 	Logger.log("> running " .. N .. " game loops...")
 
@@ -114,6 +85,7 @@ function Simulation:binomial(N, verbosity)
 	local variance = N * p * (1 - p)
 	Logger.log(string.format(
 		[[
+
  > time elapsed: %.4f s
  > average winchance: %.8f %%
  > average # of games to win: %.1f

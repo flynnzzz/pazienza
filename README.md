@@ -11,32 +11,30 @@
 
 ```
 Usage:
-  lua pazienza.lua <ACTION> <SEEDTYPE> [OPTIONS]
+    lua pazienza.lua <action> <deck-type> [options]
 
 Actions:
-  play              Play one game
-  simulate          Play games until victory
-  average           Simulate repeatedly to get an average winchance
-  binomial          Derive info through the binomial distribution
+    play       Play games [-n N] times.
+    simulate   Play games until victory.
+    binomial   Run 2^20 trials (equivalent to `play -n 1048576`).
 
-Seedtypes:
-  italian           Denare, Coppe, Spade, Bastoni
-  poker             Hearts, Diamonds, Clubs, Spades
-  mahjong           Dots, Bamboo, Characters, Winds, Dragon
+Valid deck types:
+    italian   Denare, Coppe, Spade, Bastoni
+    poker     Hearts, Diamonds, Clubs, Spades
+    mahjong   Dots, Bamboo, Characters, Winds, Dragon
 
 Options:
-  -z                Set verbosity to LOWEST
-  -l                Set verbosity to LOW
-  -m                Set verbosity to MEDIUM
-  -h                Set verbosity to HIGH
+    -h        Verbose output (HIGH)
+    -m        Medium verbosity
+    -l        Low verbosity
+    -z        Minimal verbosity
+    -n N      Number of games to play (applies only to 'play')
 
-Default verbosity values:
- - play: HIGH
- - simulate: MEDIUM
- - average: LOWEST
- Actions `average` and `binomial`s verbosities are capped to MEDIUM, passing '-h' produces the same
- result as '-m'.
-
+Notes:
+    • Default verbosity for 'play' is HIGH.
+    • Default verbosity for 'simulate' is MEDIUM.
+    • The 'binomial' action caps at MEDIUM verbosity;
+      using the '-h' flag with this action has no effect.
 ```
 
 ## 3. rules

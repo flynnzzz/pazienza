@@ -1,3 +1,3 @@
-- Add a progress bar to action `average`
+- Add a progress bar to action `binomial`
 - Add game rules to `README.md`
 - Add parse checking to decktypes
