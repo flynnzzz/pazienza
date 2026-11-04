@@ -103,6 +103,11 @@ function Simulation:binomial(N, verbosity)
 	end
 	local elapsed = os.clock() - start
 
+	if nW == 0 then
+		Logger.log("> Not a single win could be achieved")
+		return
+	end
+
 	local p = nW / N
 	local average = N / nW
 	local expected_value = N * p
