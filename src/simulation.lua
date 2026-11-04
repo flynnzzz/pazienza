@@ -7,45 +7,43 @@ local Simulation = {
 	game = Game,
 }
 
-function Simulation:startwith(verbosity)
+function Simulation:startwith(s_verbosity, g_verbosity)
 	local won = false
-	local counter = 0
+	local counter = 1
 	local winningpiles
 
 	local start = os.clock()
-	Logger.log("> starting simulation...\n", verbosity == Verbosity.MEDIUM)
+	Logger.log("> starting simulation...\n", (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.HIGH))
 
 	repeat
-		Game:playwith(verbosity)
+		Game:playwith(g_verbosity)
 		won = Game:won()
 		if won then
 			winningpiles = Game:tabletostring()
 		end
-		if verbosity == Verbosity.MEDIUM then
-			Logger:cache(string.format("%d. %s\n", counter + 1, Game:tablecompactstr()))
+		if s_verbosity == Verbosity.MEDIUM or s_verbosity == Verbosity.HIGH then
+			Logger:cache(string.format("%d. %s", counter, Game:tabletostring()))
+		elseif s_verbosity == Verbosity.LOW and (counter % 50 == 0) then
+			Logger:cache(string.format("%d. %s", counter, Game:tablecompactstr()))
 		end
 
 		counter = counter + 1
 	until won
-	Logger:flush(verbosity == Verbosity.MEDIUM)
+	Logger:flush((s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW))
 
 	local elapsed = os.clock() - start
 
+	Logger.log(string.format("%d. %s", counter - 1, Game:tablecompactstr()), s_verbosity == Verbosity.LOWEST)
 	Logger.log(
 		string.format(
 			"> achieved victory after %d rounds (%.4f seconds)\n> winning piles: %s",
-			counter,
+			counter - 1,
 			elapsed,
 			winningpiles
-		),
-		verbosity ~= Verbosity.LOWEST
+		)
 	)
 
 	return counter
-end
-
-function Simulation:start()
-	self:startwith(Verbosity.MEDIUM)
 end
 
 --
@@ -61,18 +59,28 @@ end
 --    X ~ Po(m)
 --    where p(X = nW) = (m^nW * e^-m) \ m!
 --
-function Simulation:binomial(N, verbosity)
+function Simulation:binomial(N, s_verbosity, g_verbosity)
 	Logger.log("> running " .. N .. " game loops...")
 
 	local nW = 0
 	local start = os.clock()
-	for _ = 1, N do
-		Game:playwith(verbosity)
+	if (s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW) then
+		Logger.log("> victories:")
+	end
+	for i = 1, N do
+		Game:playwith(g_verbosity)
 		if Game:won() then
 			nW = nW + 1
+			if (s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) then
+				Logger:cache(string.format("%d: %s", i, Game:tablecompactstr()))
+			elseif s_verbosity == Verbosity.LOW then
+				Logger:cache(tostring(i))
+			end
 		end
 	end
 	local elapsed = os.clock() - start
+
+	Logger:flush(true, ", ")
 
 	if nW == 0 then
 		Logger.log("> Not a single win could be achieved")

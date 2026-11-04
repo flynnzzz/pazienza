@@ -30,7 +30,6 @@ Notes:
 local BINOMIAL_SIMULATION_ROUNDS = math.floor(2 ^ 20)
 
 local Deck = require("deck")
-local Logger = require("logger")
 local G = require("game")
 local Game = G.Game
 local Verbosity = G.Verbosity
@@ -38,52 +37,23 @@ local Simulation = require("simulation")
 local decktypes = require("decktypes")
 
 local actions = {
-	play = function(verbosity, times)
+	play = function(s_verbosity, _, times)
 		if times == nil then
-			if verbosity == nil then
-				Game:play()
-			else
-				Game:playwith(verbosity)
-				Logger.log(
-					"> final round: " .. Game:tabletostring(),
-					verbosity == Verbosity.MEDIUM or verbosity == Verbosity.HIGH
-				)
-				Logger.log("> " .. Game:tablecompactstr(), verbosity == Verbosity.LOW)
-			end
-			local result
-			if Game:won() then
-				result = "> You won!"
-			else
-				result = "> You lost..."
-			end
-			Logger.log(result)
+			Game:playwith(s_verbosity or Verbosity.HIGH)
 		else
-			if verbosity == nil then
-				Simulation:binomial(times, Verbosity.HIGH)
-				return
-			end
-			Simulation:binomial(times, verbosity)
+			Simulation:binomial(times, s_verbosity or Verbosity.HIGH, Verbosity.ZERO)
 		end
 	end,
 
-	binomial = function(verbosity)
-		if verbosity == nil then
-			Simulation:binomial(BINOMIAL_SIMULATION_ROUNDS, Verbosity.LOWEST)
-		else
-			if verbosity == Verbosity.HIGH then
-				verbosity = Verbosity.MEDIUM
-			end
-			Simulation:binomial(BINOMIAL_SIMULATION_ROUNDS, verbosity)
+	binomial = function(s_verbosity, g_verbosity)
+		if s_verbosity == Verbosity.HIGH then
+			s_verbosity = Verbosity.MEDIUM
 		end
+		Simulation:binomial(BINOMIAL_SIMULATION_ROUNDS, s_verbosity or Verbosity.LOWEST, g_verbosity)
 	end,
 
-	simulate = function(verbosity)
-		if verbosity == nil then
-			Simulation:start()
-		else
-			local counter = Simulation:startwith(verbosity)
-			Logger.log("> victory after: " .. counter .. " rounds\n", verbosity == Verbosity.LOWEST)
-		end
+	simulate = function(s_verbosity, g_verbosity)
+		Simulation:startwith(s_verbosity or Verbosity.MEDIUM, g_verbosity)
 	end,
 }
 
@@ -157,7 +127,15 @@ function Main()
 	end
 
 	Game:attachdeck(Deck:new(opts.decktype))
-	opts.action(opts.verbosity, opts.times)
+
+	-- `game verbosity`
+	local g_verbosity
+	if opts.verbosity ~= Verbosity.HIGH then
+		g_verbosity = Verbosity.ZERO
+	else
+		g_verbosity = Verbosity.HIGH
+	end
+	opts.action(opts.verbosity, g_verbosity, opts.times)
 end
 
 Main()

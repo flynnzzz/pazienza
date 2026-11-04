@@ -19,12 +19,12 @@ function Logger:cache(str, condition)
 	end
 end
 
-function Logger:flush(condition)
+function Logger:flush(condition, sep)
 	if condition == nil then
 		condition = true
 	end
 	if condition then
-		io.write(table.concat(self.buffer))
+		print(table.concat(self.buffer, sep or "\n"))
 		self.buffer = {}
 		self.bufsize = 1
 	end

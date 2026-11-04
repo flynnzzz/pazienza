@@ -5,6 +5,7 @@ local Verbosity = {
 	LOW = "l",
 	MEDIUM = "m",
 	HIGH = "h",
+	ZERO = "zero",
 }
 
 local Game = { deck = nil, table = {} }
@@ -76,12 +77,15 @@ function Game:playwith(verbosity)
 		self:restart()
 	end
 
-	Game.drawmul(2)
+	Game:draw()
+	Game:draw()
 	repeat
 		Game:draw()
 
 		if verbosity == Verbosity.HIGH then
-			Logger:cache(string.format("> drawing: %s\n", self:tabletostring()))
+			Logger:cache(string.format("> drawing: %s", self:tabletostring()))
+		elseif verbosity == Verbosity.MEDIUM then
+			Logger:cache(string.format("> %s", self:tabletostring()))
 		end
 
 		local cardcount = #self.table
@@ -89,17 +93,40 @@ function Game:playwith(verbosity)
 
 		if verbosity == Verbosity.HIGH then
 			if #self.table < cardcount then
-				Logger:cache(string.format(" > matching: %s\n", self:tabletostring()))
+				Logger:cache(string.format(" > matching: %s", self:tabletostring()))
 			end
-			Logger:cache(string.format("> cards left: %d\n\n", #self.deck.cards))
+
+			local closing_message
+			if #self.deck.cards ~= 0 then
+				closing_message = string.format("> cards left: %d\n", #self.deck.cards)
+			else
+				closing_message = string.format("> cards left: %d", #self.deck.cards)
+			end
+			Logger:cache(closing_message)
 		end
 
 	until #self.deck.cards == 0
-	Logger:flush(verbosity == Verbosity.HIGH)
-end
+	Logger:flush((verbosity == Verbosity.HIGH) or (verbosity == Verbosity.MEDIUM))
 
-function Game:play()
-	self:playwith(Verbosity.HIGH)
+	if verbosity == Verbosity.ZERO then
+		return
+	end
+
+	if verbosity == Verbosity.MEDIUM then
+		Logger:cache("> final round: " .. Game:tabletostring())
+	elseif verbosity == Verbosity.LOW then
+		Logger:cache("> final: " .. Game:tablecompactstr())
+	end
+
+	Logger:flush()
+
+	local result
+	if Game:won() then
+		result = "> You won!"
+	else
+		result = "> You lost..."
+	end
+	Logger.log(result)
 end
 
 function Game:restart()
