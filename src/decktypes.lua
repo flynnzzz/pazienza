@@ -61,6 +61,7 @@ local mahjong = setmetatable({
 	CHARACTERS = from_model(MAHJONG_MODEL, "Characters"),
 	WINDS = {
 		name = "Winds",
+		multiplicity = 4,
 		specials = {
 			NORTH_WIND = { name = "North", value = 100 },
 			SOUTH_WIND = { name = "South", value = 101 },
@@ -70,6 +71,7 @@ local mahjong = setmetatable({
 	},
 	DRAGONS = {
 		name = "Dragons",
+		multiplicity = 4,
 		specials = {
 			RED_DRAGON = { name = "Red", value = 200 },
 			GREEN_DRAGON = { name = "Green", value = 201 },
