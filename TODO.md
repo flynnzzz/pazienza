@@ -1,3 +1,4 @@
-- Add a progress bar to action `binomial`
-- Add game rules to `README.md`
-- Add parse checking to decktypes
+- [x] Add a progress bar
+- [-] Add game rules to `README.md`
+- [-] Add parse checking to decktypes
+- [-] Refactor `binomial` print output to be more precise
