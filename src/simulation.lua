@@ -1,4 +1,5 @@
 local Logger = require("logger")
+local Animation = require("animation")
 local G = require("game")
 local Game = G.Game
 local Verbosity = G.Verbosity
@@ -64,11 +65,11 @@ function Simulation:binomial(N, s_verbosity, g_verbosity)
 
 	local nW = 0
 	local start = os.clock()
-	if (s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW) then
-		Logger.log("> victories:")
-	end
 	for i = 1, N do
 		Game:playwith(g_verbosity)
+
+		local timeout_value = 10000
+		Animation.printnext(i % timeout_value == 0)
 		if Game:won() then
 			nW = nW + 1
 			if (s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) then
@@ -78,22 +79,40 @@ function Simulation:binomial(N, s_verbosity, g_verbosity)
 			end
 		end
 	end
-	local elapsed = os.clock() - start
 
+	local won = nW > 1
+	Logger.log(
+		" > done! victories:",
+		((s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW)) and won
+	)
+	Logger.log(" > done!", s_verbosity == Verbosity.LOWEST or not won)
+
+	Logger.log(
+		"",
+		((s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW)) and won
+	)
 	Logger:flush(true, ", ")
+
+	if
+		((s_verbosity == Verbosity.HIGH) or (s_verbosity == Verbosity.MEDIUM) or (s_verbosity == Verbosity.LOW)) and won
+	then
+		io.write("\n")
+	else
+		io.write()
+	end
 
 	if nW == 0 then
 		Logger.log("> Not a single win could be achieved")
 		return
 	end
 
+	local elapsed = os.clock() - start
 	local p = nW / N
 	local average = N / nW
 	local expected_value = N * p
 	local variance = N * p * (1 - p)
 	Logger.log(string.format(
 		[[
-
  > time elapsed: %.4f s
  > average winchance: %.8f %%
  > average # of games to win: %.1f

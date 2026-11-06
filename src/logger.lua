@@ -5,7 +5,7 @@ function Logger.log(msg, condition)
 		condition = true
 	end
 	if condition then
-		print(msg)
+		print(msg or "")
 	end
 end
 
