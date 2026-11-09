@@ -30,6 +30,13 @@ local italian = setmetatable({
 	BASTONI = from_model(IT_MODEL, "Bastoni"),
 }, DeckType)
 
+local SUIT_SYMBOLS = {
+	Spades = "♠",
+	Hearts = "♥",
+	Diamonds = "♦",
+	Clubs = "♣",
+}
+
 local POKER_MODEL = {
 	name = "Poker Model",
 	value_start = 1,
@@ -42,10 +49,10 @@ local POKER_MODEL = {
 }
 
 local poker = setmetatable({
-	HEARTS = from_model(POKER_MODEL, "Hearts"),
-	DIAMONDS = from_model(POKER_MODEL, "Diamonds"),
-	CLUBS = from_model(POKER_MODEL, "Clubs"),
-	SPADES = from_model(POKER_MODEL, "Spades"),
+	HEARTS = from_model(POKER_MODEL, SUIT_SYMBOLS["Hearts"]),
+	DIAMONDS = from_model(POKER_MODEL, SUIT_SYMBOLS["Diamonds"]),
+	CLUBS = from_model(POKER_MODEL, SUIT_SYMBOLS["Clubs"]),
+	SPADES = from_model(POKER_MODEL, SUIT_SYMBOLS["Spades"]),
 }, DeckType)
 
 local MAHJONG_MODEL = {
