@@ -49,6 +49,9 @@ function Deck:regenerate()
 end
 
 function Deck:draw()
+	if #self.cards == 0 then
+		error("draw: deck currently has no cards")
+	end
 	local i = math.random(1, #self.cards)
 	local drawn = self.cards[i]
 

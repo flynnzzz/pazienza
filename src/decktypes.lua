@@ -91,7 +91,7 @@ if not filefound then
 end
 
 -- TODO: parser error handler
-for key, value in pairs(custom_seeds) do
+for key, value in pairs(custom_seeds or {}) do
 	local custom = setmetatable(value, DeckType)
 	return_table[key] = custom
 end
