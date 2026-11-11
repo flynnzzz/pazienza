@@ -1,3 +1,12 @@
+--
+-- decktype.lua
+--
+-- Here are defined all default decktypes.
+--
+-- Used by `SeedSet` to simplify card generation.
+-- Loads custom seedtypes from `custom.lua`.
+--
+
 local from_model = require("seedset").from_model
 
 local DeckType = {}

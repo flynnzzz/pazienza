@@ -1,3 +1,12 @@
+--
+-- logger.lua
+--
+-- Simple logger module.
+--
+-- Created mainly to store strings before flushing
+-- them out, every method accepts a (bool) print condition.
+--
+
 local Logger = { buffer = {}, bufsize = 1 }
 
 function Logger.log(msg, condition)

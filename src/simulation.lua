@@ -1,3 +1,11 @@
+--
+-- simulation.lua
+--
+-- Provides auxiliary functions to run `Game` simulations.
+--
+-- Allows for custom `Verbosity` options.
+--
+
 local Logger = require("logger")
 local Animation = require("animation")
 local G = require("game")

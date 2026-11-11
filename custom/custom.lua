@@ -1,3 +1,12 @@
+--
+-- custom.lua
+--
+-- Here you can define custom `DeckType`s according to this schema:
+-- TODO: add schema
+--
+-- The file will be loaded automatically during startup.
+--
+
 local from_model = require("seedset").from_model
 local seeds = {}
 

@@ -1,3 +1,11 @@
+--
+-- seedset.lua
+--
+-- Collection of `Card`s from a singular seedtype.
+--
+-- Despite the name, it can contain duplicates.
+--
+
 local Card = require("card")
 
 local function from_model(model, name)

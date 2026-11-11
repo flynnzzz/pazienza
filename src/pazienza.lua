@@ -1,3 +1,11 @@
+--
+-- pazienza.lua
+--
+-- Main entrypoint of the program.
+--
+-- Handles argument parsing and coordinates every module.
+--
+
 package.path = package.path .. ";./src/?.lua;./custom/?.lua;../custom/?.lua"
 local USAGE = [[
 Usage:

@@ -1,3 +1,12 @@
+--
+-- deck.lua
+--
+-- Collection of cards from different seedtypes.
+--
+-- Every card is generated automatically during instantiation.
+-- A deck can hold multiples of a single decktype.
+--
+
 local SeedSet = require("seedset").SeedSet
 
 local Deck = {}

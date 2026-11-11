@@ -1,3 +1,11 @@
+--
+-- animation.lua
+--
+-- Braille spinner loading animation module.
+--
+-- Circles through 8 frames of the animation.
+--
+
 local HIDE_CURSOR = "\x1b[?25l"
 local UNHIDE_CURSOR = "\x1b[?25h"
 local CLEAR_RIGHT_CURSOR = "\x1b[2K"
